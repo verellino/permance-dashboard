@@ -16,6 +16,6 @@ export default async function ClientLayout({
     redirect('/login');
   }
 
-  return <div className="min-h-screen bg-gray-50 p-6">{children}</div>;
+  return <div className="min-h-screen bg-gray-50">{children}</div>;
 }
 

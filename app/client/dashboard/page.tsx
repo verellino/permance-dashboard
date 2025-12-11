@@ -1,11 +1,16 @@
+import { WorkspaceShell } from '@/components/workspace-shell';
+
 export default function ClientDashboard() {
   return (
-    <div>
-      <h1 className="text-2xl font-semibold">Client Workspace</h1>
-      <p className="text-gray-600">
-        Placeholder for client-specific dashboards, content, and stats.
-      </p>
-    </div>
+    <WorkspaceShell
+      workspaceType="CLIENT"
+      title="Client Dashboard"
+      description="KPIs, content performance, and pipeline."
+    >
+      <div className="rounded-lg border bg-card p-6 text-sm text-muted-foreground">
+        Client dashboard content (placeholder)
+      </div>
+    </WorkspaceShell>
   );
 }
 

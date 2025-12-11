@@ -1,14 +1,14 @@
 import { WorkspaceShell } from '@/components/workspace-shell';
 
-export default function ClipperDashboard() {
+export default function Page() {
   return (
     <WorkspaceShell
-      workspaceType="CLIPPER"
-      title="Clipper Dashboard"
-      description="Today’s tasks, deadlines, and quick links."
+      workspaceType="CLIENT"
+      title="Invites"
+      description="Invite client team members."
     >
       <div className="rounded-lg border bg-card p-6 text-sm text-muted-foreground">
-        Clipper dashboard content (placeholder)
+        Client invites (placeholder)
       </div>
     </WorkspaceShell>
   );
