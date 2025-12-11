@@ -8,6 +8,7 @@ import { getMongoClient } from '@/lib/mongodb';
 import { findUserByEmail } from '@/lib/models/user';
 import { getMembershipsForUser } from '@/lib/models/workspace-membership';
 import { logAuditEvent } from '@/lib/models/audit-log';
+import { getDb } from '@/lib/mongodb';
 
 const googleClientId = process.env.GOOGLE_CLIENT_ID;
 const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
@@ -62,10 +63,21 @@ export const authConfig: NextAuthConfig = {
       // attach memberships for workspace-aware routing
       if (token.sub) {
         const memberships = await getMembershipsForUser(new ObjectId(token.sub));
+        const ids = memberships.map((m) => m.workspaceId);
+        const db = await getDb();
+        const workspaces = await db
+          .collection('workspaces')
+          .find({ _id: { $in: ids } }, { projection: { subdomain: 1 } })
+          .toArray();
+        const wsMap = new Map(
+          workspaces.map((w: any) => [w._id.toString(), w.subdomain as string])
+        );
+
         token.memberships = memberships.map((m) => ({
           workspaceId: m.workspaceId.toString(),
           role: m.role,
-          workspaceType: m.workspaceType
+          workspaceType: m.workspaceType,
+          subdomain: wsMap.get(m.workspaceId.toString()) || null
         }));
       }
 

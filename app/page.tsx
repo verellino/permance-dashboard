@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/config';
-import { SubdomainForm } from './subdomain-form';
-import { rootDomain } from '@/lib/utils';
+import { protocol, rootDomain } from '@/lib/utils';
 
 export default async function HomePage() {
   const session = await auth();
@@ -12,19 +11,40 @@ export default async function HomePage() {
 
   const memberships =
     (session as any).memberships as
-      | { workspaceId: string; workspaceType: string; role: string }[]
+      | {
+          workspaceId: string;
+          workspaceType: string;
+          role: string;
+          subdomain?: string | null;
+        }[]
       | undefined;
 
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-blue-50 to-white p-4 relative">
-      <div className="absolute top-4 right-4">
-        <Link
-          href="/admin"
-          className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
-        >
-          Admin
-        </Link>
-      </div>
-    </div>
+  // If user has a MASTER membership, send them to master dashboard on root domain.
+  const masterMember = memberships?.find(
+    (m) => m.workspaceType === 'MASTER'
   );
+  if (masterMember) {
+    redirect('/master/dashboard');
+  }
+
+  const clientMember = memberships?.find(
+    (m) => m.workspaceType === 'CLIENT' && m.subdomain
+  );
+  if (clientMember?.subdomain) {
+    redirect(
+      `${protocol}://${clientMember.subdomain}.${rootDomain}/client/dashboard`
+    );
+  }
+
+  const clipperMember = memberships?.find(
+    (m) => m.workspaceType === 'CLIPPER' && m.subdomain
+  );
+  if (clipperMember?.subdomain) {
+    redirect(
+      `${protocol}://${clipperMember.subdomain}.${rootDomain}/clipper/dashboard`
+    );
+  }
+
+  // No master membership on root → they don't belong here.
+  redirect('/no-access');
 }
