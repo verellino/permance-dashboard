@@ -1,10 +1,15 @@
 'use server';
 
-import { redis } from '@/lib/redis';
-import { isValidIcon } from '@/lib/subdomains';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
-import { rootDomain, protocol } from '@/lib/utils';
+import { protocol, rootDomain } from '@/lib/utils';
+import { isValidIcon } from '@/lib/subdomains';
+import {
+  createWorkspaceWithCache,
+  ensureWorkspace
+} from '@/lib/workspaces';
+import { softDeleteWorkspace } from '@/lib/models/workspace';
+import { ObjectId } from 'mongodb';
 
 export async function createSubdomainAction(
   prevState: any,
@@ -38,10 +43,8 @@ export async function createSubdomainAction(
     };
   }
 
-  const subdomainAlreadyExists = await redis.get(
-    `subdomain:${sanitizedSubdomain}`
-  );
-  if (subdomainAlreadyExists) {
+  const existing = await ensureWorkspace(sanitizedSubdomain);
+  if (existing) {
     return {
       subdomain,
       icon,
@@ -50,9 +53,11 @@ export async function createSubdomainAction(
     };
   }
 
-  await redis.set(`subdomain:${sanitizedSubdomain}`, {
-    emoji: icon,
-    createdAt: Date.now()
+  await createWorkspaceWithCache({
+    name: sanitizedSubdomain,
+    subdomain: sanitizedSubdomain,
+    type: 'CLIENT',
+    settings: { emoji: icon }
   });
 
   redirect(`${protocol}://${sanitizedSubdomain}.${rootDomain}`);
@@ -63,7 +68,13 @@ export async function deleteSubdomainAction(
   formData: FormData
 ) {
   const subdomain = formData.get('subdomain');
-  await redis.del(`subdomain:${subdomain}`);
+  if (typeof subdomain !== 'string') {
+    return { success: false, error: 'Invalid subdomain' };
+  }
+  const existing = await ensureWorkspace(subdomain);
+  if (existing?._id) {
+    await softDeleteWorkspace(new ObjectId(existing._id));
+  }
   revalidatePath('/admin');
   return { success: 'Domain deleted successfully' };
 }

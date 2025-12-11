@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getSubdomainData } from '@/lib/subdomains';
+import { resolveWorkspace } from '@/lib/workspaces';
 import { protocol, rootDomain } from '@/lib/utils';
 
 export async function generateMetadata({
@@ -31,8 +32,9 @@ export default async function SubdomainPage({
 }) {
   const { subdomain } = await params;
   const subdomainData = await getSubdomainData(subdomain);
+  const workspace = await resolveWorkspace(subdomain);
 
-  if (!subdomainData) {
+  if (!subdomainData || !workspace) {
     notFound();
   }
 
@@ -56,6 +58,17 @@ export default async function SubdomainPage({
           <p className="mt-3 text-lg text-gray-600">
             This is your custom subdomain page
           </p>
+          <p className="mt-2 text-sm text-gray-500">
+            Workspace type: {workspace.type}
+          </p>
+          <div className="mt-6">
+            <Link
+              href="/login"
+              className="inline-flex rounded bg-blue-600 px-4 py-2 text-white"
+            >
+              Sign in
+            </Link>
+          </div>
         </div>
       </div>
     </div>

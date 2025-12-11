@@ -1,4 +1,8 @@
-import { redis } from '@/lib/redis';
+import { getDb } from '@/lib/mongodb';
+import {
+  getWorkspaceBySubdomain,
+  type WorkspaceDocument
+} from '@/lib/models/workspace';
 
 export function isValidIcon(str: string) {
   if (str.length > 10) {
@@ -33,29 +37,30 @@ type SubdomainData = {
 
 export async function getSubdomainData(subdomain: string) {
   const sanitizedSubdomain = subdomain.toLowerCase().replace(/[^a-z0-9-]/g, '');
-  const data = await redis.get<SubdomainData>(
-    `subdomain:${sanitizedSubdomain}`
-  );
-  return data;
+  const workspace = await getWorkspaceBySubdomain(sanitizedSubdomain);
+  if (!workspace) return null;
+  const emoji =
+    (workspace.settings as { emoji?: string } | undefined)?.emoji || '❓';
+  return {
+    emoji,
+    createdAt: workspace.createdAt.getTime()
+  };
 }
 
 export async function getAllSubdomains() {
-  const keys = await redis.keys('subdomain:*');
+  const db = await getDb();
+  const workspaces = await db
+    .collection<WorkspaceDocument>('workspaces')
+    .find({ deletedAt: { $exists: false } })
+    .toArray();
 
-  if (!keys.length) {
-    return [];
-  }
-
-  const values = await redis.mget<SubdomainData[]>(...keys);
-
-  return keys.map((key, index) => {
-    const subdomain = key.replace('subdomain:', '');
-    const data = values[index];
-
+  return workspaces.map((ws: WorkspaceDocument) => {
+    const emoji =
+      (ws.settings as { emoji?: string } | undefined)?.emoji || '❓';
     return {
-      subdomain,
-      emoji: data?.emoji || '❓',
-      createdAt: data?.createdAt || Date.now()
+      subdomain: ws.subdomain,
+      emoji,
+      createdAt: ws.createdAt?.getTime?.() ?? Date.now()
     };
   });
 }
