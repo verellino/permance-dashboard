@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createInviteAction } from '@/app/actions/master';
+import { useInvalidateQueries } from '@/lib/react-query-utils';
 import { toast } from 'sonner';
 
 interface Workspace {
@@ -21,6 +22,7 @@ interface InviteFormProps {
 
 export function InviteForm({ workspaces }: InviteFormProps) {
   const router = useRouter();
+  const { invalidateInvites } = useInvalidateQueries();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -42,6 +44,7 @@ export function InviteForm({ workspaces }: InviteFormProps) {
       });
 
       if (result.success) {
+        await invalidateInvites();
         toast.success('Invite created and sent successfully');
         router.push('/master/invites');
       } else {

@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -51,7 +50,11 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
       : 'outline';
 
   return (
-    <WorkspaceShell workspaceType="MASTER" title="Post Details" description="View and manage post information">
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Post Details</h1>
+        <p className="text-muted-foreground">View and manage post information</p>
+      </div>
       <div className="space-y-6">
         {/* Header Section */}
         <div className="flex items-start justify-between">
@@ -305,6 +308,6 @@ export default function PostDetailPage({ params }: { params: { id: string } }) {
           </Link>
         </div>
       </div>
-    </WorkspaceShell>
+    </>
   );
 }

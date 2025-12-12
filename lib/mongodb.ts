@@ -55,6 +55,9 @@ async function ensureIndexes(db: Db) {
       .collection('workspace_memberships')
       .createIndex({ userId: 1, workspaceId: 1 }, { unique: true }),
     db
+      .collection('workspace_memberships')
+      .createIndex({ workspaceId: 1 }),
+    db
       .collection('invites')
       .createIndex({ expiresAt: 1 }, { expireAfterSeconds: 0 }),
     db

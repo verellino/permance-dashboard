@@ -1,26 +1,44 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
+'use client';
+
 import { ClippersTable } from './clippers-table';
-import { getClippersData } from './data';
+import { useClippers } from './queries';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function Page() {
-  const clippers = await getClippersData({ limit: 100 });
+function ClippersTableSkeleton() {
+  return (
+    <div className="space-y-4">
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+    </div>
+  );
+}
+
+export default function Page() {
+  const { data: clippers, isLoading } = useClippers({ limit: 100 });
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Clippers"
-      description="Manage clipper workspaces and accounts."
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Clippers</h1>
+        <p className="text-muted-foreground">Manage clipper workspaces and accounts.</p>
+      </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-end">
           <Link href="/master/clippers/new">
             <Button>Create Clipper</Button>
           </Link>
         </div>
-        <ClippersTable initialData={clippers as any} />
+        {isLoading ? (
+          <ClippersTableSkeleton />
+        ) : (
+          <ClippersTable initialData={clippers || []} />
+        )}
       </div>
-    </WorkspaceShell>
+    </>
   );
 }

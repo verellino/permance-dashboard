@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/config';
 import { hasRole } from '@/lib/rbac';
+import { MasterShell } from '@/components/master-shell';
 
 export default async function MasterLayout({
   children
@@ -19,5 +20,5 @@ export default async function MasterLayout({
     redirect('/login');
   }
 
-  return <div className="min-h-screen">{children}</div>;
+  return <MasterShell>{children}</MasterShell>;
 }

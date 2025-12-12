@@ -33,7 +33,7 @@ export const clientsColumns: ColumnDef<ClientWithCounts>[] = [
   },
   {
     accessorKey: 'name',
-    header: 'Name',
+    header: 'Client Name',
     cell: ({ row }) => row.original.name,
   },
   {

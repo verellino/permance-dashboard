@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/config';
+import { ClientShell } from '@/components/client-shell';
 
 export default async function ClientLayout({
   children
@@ -16,6 +17,6 @@ export default async function ClientLayout({
     redirect('/login');
   }
 
-  return <div className="min-h-screen bg-gray-50">{children}</div>;
+  return <ClientShell>{children}</ClientShell>;
 }
 

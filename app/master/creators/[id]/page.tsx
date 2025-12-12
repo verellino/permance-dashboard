@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation';
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -49,11 +48,11 @@ export default function CreatorDetailPage({ params }: { params: { id: string } }
       : IconBrandYoutube;
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Creator Profile"
-      description="Detailed creator information and performance metrics"
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Creator Profile</h1>
+        <p className="text-muted-foreground">Detailed creator information and performance metrics</p>
+      </div>
       <div className="space-y-6">
         {/* Profile Header */}
         <div className="flex items-start gap-6">
@@ -326,6 +325,6 @@ export default function CreatorDetailPage({ params }: { params: { id: string } }
           </Link>
         </div>
       </div>
-    </WorkspaceShell>
+    </>
   );
 }

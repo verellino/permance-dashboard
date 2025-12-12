@@ -1,4 +1,3 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { CreatorsTable } from './creators-table';
 import { mockCreators } from './data';
 
@@ -8,11 +7,11 @@ import { mockCreators } from './data';
  */
 export default function CreatorsPage() {
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Creators"
-      description="Content creators, performance metrics, and payment tracking"
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Creators</h1>
+        <p className="text-muted-foreground">Content creators, performance metrics, and payment tracking</p>
+      </div>
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
@@ -21,6 +20,6 @@ export default function CreatorsPage() {
         </div>
         <CreatorsTable initialData={mockCreators} />
       </div>
-    </WorkspaceShell>
+    </>
   );
 }

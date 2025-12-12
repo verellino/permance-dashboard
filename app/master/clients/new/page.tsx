@@ -2,15 +2,16 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createWorkspaceAction } from '@/app/actions/master';
+import { useInvalidateQueries } from '@/lib/react-query-utils';
 import { toast } from 'sonner';
 
 export default function NewClientPage() {
   const router = useRouter();
+  const { invalidateClients } = useInvalidateQueries();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -29,6 +30,7 @@ export default function NewClientPage() {
       });
 
       if (result.success) {
+        await invalidateClients();
         toast.success('Client workspace created successfully');
         router.push('/master/clients');
       } else {
@@ -43,11 +45,11 @@ export default function NewClientPage() {
   }
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Create Client"
-      description="Create a new client workspace."
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Create Client</h1>
+        <p className="text-muted-foreground">Create a new client workspace.</p>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
         <div className="space-y-2">
           <Label htmlFor="name">Client Name</Label>
@@ -91,7 +93,7 @@ export default function NewClientPage() {
           </Button>
         </div>
       </form>
-    </WorkspaceShell>
+    </>
   );
 }
 

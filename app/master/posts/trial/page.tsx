@@ -1,4 +1,3 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { TrialTable } from './trial-table';
 import { mockPosts } from '../data';
 
@@ -11,11 +10,11 @@ export default function TrialReelsPage() {
   const trialReels = mockPosts.filter((post) => post.is_trial);
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Trial Reels"
-      description="Review and approve trial content submissions"
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Trial Reels</h1>
+        <p className="text-muted-foreground">Review and approve trial content submissions</p>
+      </div>
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
@@ -24,6 +23,6 @@ export default function TrialReelsPage() {
         </div>
         <TrialTable initialData={trialReels} />
       </div>
-    </WorkspaceShell>
+    </>
   );
 }

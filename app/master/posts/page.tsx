@@ -1,4 +1,3 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { PostsTable } from './posts-table';
 import { mockPosts } from './data';
 
@@ -11,12 +10,12 @@ export default function PostsPage() {
   const publishedPosts = mockPosts.filter((post) => !post.is_trial);
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="All Posts"
-      description="Published content across all clients"
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">All Posts</h1>
+        <p className="text-muted-foreground">Published content across all clients</p>
+      </div>
       <PostsTable initialData={publishedPosts} />
-    </WorkspaceShell>
+    </>
   );
 }

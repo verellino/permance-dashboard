@@ -1,16 +1,14 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
-
 export default function Page() {
   return (
-    <WorkspaceShell
-      workspaceType="CLIPPER"
-      title="Settings"
-      description="Profile, notifications, and API key."
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Settings</h1>
+        <p className="text-muted-foreground">Profile, notifications, and API key.</p>
+      </div>
       <div className="rounded-lg border bg-card p-6 text-sm text-muted-foreground">
         Settings (placeholder)
       </div>
-    </WorkspaceShell>
+    </>
   );
 }
 

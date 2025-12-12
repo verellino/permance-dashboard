@@ -1,4 +1,3 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { InviteForm } from './invite-form';
 import { getWorkspacesByType } from '@/lib/models/workspace';
 
@@ -28,13 +27,13 @@ export default async function NewInvitePage() {
   ];
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Create Invite"
-      description="Invite a user to join a workspace."
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Create Invite</h1>
+        <p className="text-muted-foreground">Invite a user to join a workspace.</p>
+      </div>
       <InviteForm workspaces={workspaces} />
-    </WorkspaceShell>
+    </>
   );
 }
 

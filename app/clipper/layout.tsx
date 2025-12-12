@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { auth } from '@/lib/auth/config';
 import { hasRole } from '@/lib/rbac';
+import { ClipperShell } from '@/components/clipper-shell';
 
 export default async function ClipperLayout({
   children
@@ -23,6 +24,6 @@ export default async function ClipperLayout({
     redirect('/login');
   }
 
-  return <div className="min-h-screen bg-gray-50">{children}</div>;
+  return <ClipperShell>{children}</ClipperShell>;
 }
 

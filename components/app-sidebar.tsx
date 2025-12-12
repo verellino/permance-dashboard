@@ -47,8 +47,15 @@ const masterNav = [
   { title: "Dashboard", url: "/master/dashboard", icon: IconDashboard },
   { title: "Clients", url: "/master/clients", icon: IconBuildingSkyscraper },
   { title: "Clippers", url: "/master/clippers", icon: IconScissors },
-  { title: "Posts", url: "/master/posts", icon: IconFiles },
-  { title: "Trial Reels", url: "/master/posts/trial", icon: IconBulb },
+  { 
+    title: "Posts", 
+    url: "/master/posts", 
+    icon: IconFiles,
+    items: [
+      { title: "All Posts", url: "/master/posts", icon: IconFiles },
+      { title: "Trial Reels", url: "/master/posts/trial", icon: IconBulb },
+    ]
+  },
   { title: "Billing", url: "/master/billing", icon: IconReceipt2 },
   { title: "Workspace: Users & Roles", url: "/master/users", icon: IconUsers },
   { title: "Workspace Settings", url: "/master/workspace-settings", icon: IconSettings },

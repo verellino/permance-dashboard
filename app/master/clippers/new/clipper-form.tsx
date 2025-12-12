@@ -2,12 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { WorkspaceShell } from '@/components/workspace-shell';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createWorkspaceAction } from '@/app/actions/master';
+import { useInvalidateQueries } from '@/lib/react-query-utils';
 import { toast } from 'sonner';
 
 interface ClipperFormProps {
@@ -16,6 +16,7 @@ interface ClipperFormProps {
 
 export function ClipperForm({ clients }: ClipperFormProps) {
   const router = useRouter();
+  const { invalidateClippers } = useInvalidateQueries();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -36,6 +37,7 @@ export function ClipperForm({ clients }: ClipperFormProps) {
       });
 
       if (result.success) {
+        await invalidateClippers();
         toast.success('Clipper workspace created successfully');
         router.push('/master/clippers');
       } else {
@@ -50,11 +52,11 @@ export function ClipperForm({ clients }: ClipperFormProps) {
   }
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Create Clipper"
-      description="Create a new clipper workspace."
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Create Clipper</h1>
+        <p className="text-muted-foreground">Create a new clipper workspace.</p>
+      </div>
       <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl">
         <div className="space-y-2">
           <Label htmlFor="name">Clipper Name</Label>
@@ -121,7 +123,7 @@ export function ClipperForm({ clients }: ClipperFormProps) {
           </Button>
         </div>
       </form>
-    </WorkspaceShell>
+    </>
   );
 }
 

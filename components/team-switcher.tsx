@@ -19,6 +19,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { protocol, rootDomain } from "@/lib/utils";
 
 type Membership = {
@@ -37,7 +38,7 @@ type Team = {
 
 export function TeamSwitcher() {
   const { isMobile } = useSidebar();
-  const { data } = useSession();
+  const { data, status } = useSession();
   const memberships = (data as any)?.memberships as Membership[] | undefined;
 
   const teams: Team[] =
@@ -79,6 +80,26 @@ export function TeamSwitcher() {
       window.location.href = `${protocol}://${m.subdomain}.${rootDomain}${path}`;
     }
   };
+
+  if (status === "loading") {
+    return (
+      <SidebarMenu>
+        <SidebarMenuItem>
+          <SidebarMenuButton
+            size="lg"
+            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground border"
+            disabled
+          >
+            <Skeleton className="aspect-square size-8 rounded-lg" />
+            <div className="grid flex-1 text-left text-sm leading-tight gap-1">
+              <Skeleton className="h-4 w-24" />
+            </div>
+            <Skeleton className="ml-auto size-4" />
+          </SidebarMenuButton>
+        </SidebarMenuItem>
+      </SidebarMenu>
+    );
+  }
 
   if (!activeTeam) return null;
 

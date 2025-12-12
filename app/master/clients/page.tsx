@@ -1,27 +1,42 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
+'use client';
+
 import { ClientsTable } from './clients-table';
-import { getClientsData } from './data';
+import { useClients } from './queries';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { Skeleton } from '@/components/ui/skeleton';
 
-export default async function Page() {
-  const clients = await getClientsData({ limit: 100 });
+function ClientsTableSkeleton() {
+  return (
+    <div className="space-y-4">
+      <Skeleton className="h-12 w-full" />
+      <Skeleton className="h-40 w-full mt-4" />
+    </div>
+  );
+}
+
+export default function Page() {
+  const { data: clients, isLoading } = useClients({ limit: 100 });
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Clients"
-      description="Manage client workspaces and view their status."
-    >
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Clients</h1>
+        <p className="text-muted-foreground">Manage client workspaces and view their status.</p>
+      </div>
       <div className="flex flex-col gap-4">
         <div className="flex justify-end">
           <Link href="/master/clients/new">
             <Button>Create Client</Button>
           </Link>
         </div>
-        <ClientsTable initialData={clients as any} />
+        {isLoading ? (
+          <ClientsTableSkeleton />
+        ) : (
+          <ClientsTable initialData={clients || []} />
+        )}
       </div>
-    </WorkspaceShell>
+    </>
   );
 }
 

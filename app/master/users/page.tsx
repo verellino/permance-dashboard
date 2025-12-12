@@ -1,18 +1,36 @@
-import { WorkspaceShell } from '@/components/workspace-shell';
-import { UsersTable } from './users-table';
-import { getUsersData } from './data';
+'use client';
 
-export default async function Page() {
-  const users = await getUsersData({ limit: 100 });
+import { UsersTable } from './users-table';
+import { useUsers } from './queries';
+import { Skeleton } from '@/components/ui/skeleton';
+
+function UsersTableSkeleton() {
+  return (
+    <div className="space-y-4">
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+      <Skeleton className="h-10 w-full" />
+    </div>
+  );
+}
+
+export default function Page() {
+  const { data: users, isLoading } = useUsers({ limit: 100 });
 
   return (
-    <WorkspaceShell
-      workspaceType="MASTER"
-      title="Users & Roles"
-      description="Manage agency users and roles."
-    >
-      <UsersTable initialData={users as any} />
-    </WorkspaceShell>
+    <>
+      <div className="flex flex-col gap-1">
+        <h1 className="text-2xl font-semibold">Users & Roles</h1>
+        <p className="text-muted-foreground">Manage agency users and roles.</p>
+      </div>
+      {isLoading ? (
+        <UsersTableSkeleton />
+      ) : (
+        <UsersTable initialData={users || []} />
+      )}
+    </>
   );
 }
 
