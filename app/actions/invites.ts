@@ -12,6 +12,7 @@ import {
 } from '@/lib/models/invite';
 import { insertUser, findUserByEmail } from '@/lib/models/user';
 import { upsertMembership } from '@/lib/models/workspace-membership';
+import { getWorkspaceById } from '@/lib/models/workspace';
 import { logAuditEvent } from '@/lib/models/audit-log';
 
 const INVITE_EXPIRY_MS = 1000 * 60 * 60 * 24 * 7; // 7 days
@@ -97,11 +98,17 @@ export async function acceptInviteAction(prevState: any, formData: FormData) {
       })
     )._id;
 
+  // Get workspace to determine type
+  const workspace = await getWorkspaceById(invite.workspaceId);
+  if (!workspace) {
+    return { success: false, error: 'Workspace not found' };
+  }
+
   await upsertMembership({
     userId,
     workspaceId: invite.workspaceId,
     role: invite.role,
-    workspaceType: 'CLIENT',
+    workspaceType: workspace.type,
     invitedBy: invite.invitedBy
   });
 

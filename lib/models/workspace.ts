@@ -57,3 +57,66 @@ export async function softDeleteWorkspace(workspaceId: ObjectId) {
     );
 }
 
+export async function getWorkspaceById(workspaceId: ObjectId) {
+  const db = await getDb();
+  return db.collection<WorkspaceDocument>(COLLECTION).findOne({ _id: workspaceId });
+}
+
+export async function getWorkspacesByType(
+  type: WorkspaceType,
+  options?: {
+    limit?: number;
+    skip?: number;
+    includeDeleted?: boolean;
+    search?: string;
+  }
+) {
+  const db = await getDb();
+  const query: any = { type };
+  
+  if (!options?.includeDeleted) {
+    query.deletedAt = { $exists: false };
+  }
+  
+  if (options?.search) {
+    query.$or = [
+      { name: { $regex: options.search, $options: 'i' } },
+      { subdomain: { $regex: options.search, $options: 'i' } }
+    ];
+  }
+  
+  const cursor = db.collection<WorkspaceDocument>(COLLECTION).find(query);
+  
+  if (options?.skip) {
+    cursor.skip(options.skip);
+  }
+  if (options?.limit) {
+    cursor.limit(options.limit);
+  }
+  
+  return cursor.sort({ createdAt: -1 }).toArray();
+}
+
+export async function updateWorkspace(
+  workspaceId: ObjectId,
+  updates: Partial<Pick<WorkspaceDocument, 'name' | 'subdomain' | 'settings'>>
+) {
+  const db = await getDb();
+  await db
+    .collection<WorkspaceDocument>(COLLECTION)
+    .updateOne(
+      { _id: workspaceId },
+      { $set: { ...updates, updatedAt: new Date() } }
+    );
+}
+
+export async function checkSubdomainExists(subdomain: string, excludeId?: ObjectId) {
+  const db = await getDb();
+  const query: any = { subdomain, deletedAt: { $exists: false } };
+  if (excludeId) {
+    query._id = { $ne: excludeId };
+  }
+  const existing = await db.collection<WorkspaceDocument>(COLLECTION).findOne(query);
+  return !!existing;
+}
+

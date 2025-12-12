@@ -25,6 +25,7 @@ import {
   IconTimelineEvent,
   IconBriefcase,
   IconLayersIntersect,
+  IconScissors,
 } from "@tabler/icons-react"
 
 import { NavDocuments } from "@/components/nav-documents"
@@ -45,19 +46,20 @@ import { TeamSwitcher } from "@/components/team-switcher"
 const masterNav = [
   { title: "Dashboard", url: "/master/dashboard", icon: IconDashboard },
   { title: "Clients", url: "/master/clients", icon: IconBuildingSkyscraper },
+  { title: "Clippers", url: "/master/clippers", icon: IconScissors },
   { title: "Posts", url: "/master/posts", icon: IconFiles },
   { title: "Trial Reels", url: "/master/posts/trial", icon: IconBulb },
-  { title: "Creators", url: "/master/creators", icon: IconUsers },
-  { title: "Content (Legacy)", url: "/master/content", icon: IconFiles },
-  { title: "Operations", url: "/master/operations", icon: IconListDetails },
-  { title: "Content Intelligence", url: "/master/content-intelligence", icon: IconCpu },
-  { title: "Workspace: Users & Roles", url: "/master/users", icon: IconUsers },
   { title: "Billing", url: "/master/billing", icon: IconReceipt2 },
-  { title: "API Keys", url: "/master/api-keys", icon: IconKey },
-  { title: "Audit Logs", url: "/master/audit-logs", icon: IconShieldLock },
-  { title: "Invites", url: "/master/invites", icon: IconSend },
+  { title: "Workspace: Users & Roles", url: "/master/users", icon: IconUsers },
   { title: "Workspace Settings", url: "/master/workspace-settings", icon: IconSettings },
-  { title: "Account", url: "/master/account", icon: IconUserCircle },
+  // { title: "Creators", url: "/master/creators", icon: IconUsers },
+  // { title: "Content (Legacy)", url: "/master/content", icon: IconFiles },
+  // { title: "Operations", url: "/master/operations", icon: IconListDetails },
+  // { title: "Content Intelligence", url: "/master/content-intelligence", icon: IconCpu },
+  // { title: "API Keys", url: "/master/api-keys", icon: IconKey },
+  // { title: "Audit Logs", url: "/master/audit-logs", icon: IconShieldLock },
+  // { title: "Invites", url: "/master/invites", icon: IconSend },
+  // { title: "Account", url: "/master/account", icon: IconUserCircle },
 ]
 
 const clientNav = [
@@ -128,7 +130,7 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={navMain} />
-        <NavSecondary items={secondary} className="mt-auto" />
+        {/* <NavSecondary items={secondary} className="mt-auto" /> */}
       </SidebarContent>
       <SidebarFooter>
         <NavUser />

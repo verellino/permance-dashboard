@@ -9,7 +9,10 @@ export type AuditAction =
   | 'PASSWORD_RESET_REQUEST'
   | 'PASSWORD_RESET_COMPLETE'
   | 'EMAIL_VERIFY'
-  | 'ROLE_CHANGE';
+  | 'ROLE_CHANGE'
+  | 'WORKSPACE_CREATE'
+  | 'WORKSPACE_UPDATE'
+  | 'WORKSPACE_DELETE';
 
 export type AuditLogDocument = {
   _id: ObjectId;

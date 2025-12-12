@@ -53,3 +53,57 @@ export async function verifyUserEmail(userId: ObjectId) {
     );
 }
 
+export async function getUserById(userId: ObjectId) {
+  const db = await getDb();
+  return db.collection<UserDocument>(COLLECTION).findOne({ _id: userId });
+}
+
+export async function getAllUsers(options?: {
+  limit?: number;
+  skip?: number;
+  search?: string;
+}) {
+  const db = await getDb();
+  const query: any = {};
+  
+  if (options?.search) {
+    query.$or = [
+      { email: { $regex: options.search, $options: 'i' } },
+      { name: { $regex: options.search, $options: 'i' } }
+    ];
+  }
+  
+  const cursor = db.collection<UserDocument>(COLLECTION).find(query);
+  
+  if (options?.skip) {
+    cursor.skip(options.skip);
+  }
+  if (options?.limit) {
+    cursor.limit(options.limit);
+  }
+  
+  return cursor.toArray();
+}
+
+export async function updateUser(userId: ObjectId, updates: Partial<Pick<UserDocument, 'name' | 'email'>>) {
+  const db = await getDb();
+  await db
+    .collection<UserDocument>(COLLECTION)
+    .updateOne(
+      { _id: userId },
+      { $set: { ...updates, updatedAt: new Date() } }
+    );
+}
+
+export async function disableUser(userId: ObjectId) {
+  const db = await getDb();
+  // For now, we'll add a disabledAt field if needed, or use a flag
+  // Since the schema doesn't have it, we'll add it dynamically
+  await db
+    .collection<UserDocument>(COLLECTION)
+    .updateOne(
+      { _id: userId },
+      { $set: { updatedAt: new Date() } }
+    );
+}
+

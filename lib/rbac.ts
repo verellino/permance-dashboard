@@ -10,6 +10,7 @@ const hierarchy: Record<UserRole, number> = {
 
 export type Permission =
   | 'GLOBAL_SETTINGS'
+  | 'MANAGE_USERS'
   | 'MANAGE_CLIENTS'
   | 'MANAGE_CLIPPERS'
   | 'BILLING'
@@ -36,6 +37,7 @@ const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> =
   MASTER: {
     OWNER: [
       'GLOBAL_SETTINGS',
+      'MANAGE_USERS',
       'MANAGE_CLIENTS',
       'MANAGE_CLIPPERS',
       'BILLING',
@@ -57,6 +59,7 @@ const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> =
       'FINANCE_VIEW'
     ],
     ADMIN: [
+      'MANAGE_USERS',
       'MANAGE_CLIENTS',
       'MANAGE_CLIPPERS',
       'BILLING',
