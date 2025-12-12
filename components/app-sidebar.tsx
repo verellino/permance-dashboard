@@ -45,7 +45,10 @@ import { TeamSwitcher } from "@/components/team-switcher"
 const masterNav = [
   { title: "Dashboard", url: "/master/dashboard", icon: IconDashboard },
   { title: "Clients", url: "/master/clients", icon: IconBuildingSkyscraper },
-  { title: "Content", url: "/master/content", icon: IconFiles },
+  { title: "Posts", url: "/master/posts", icon: IconFiles },
+  { title: "Trial Reels", url: "/master/posts/trial", icon: IconBulb },
+  { title: "Creators", url: "/master/creators", icon: IconUsers },
+  { title: "Content (Legacy)", url: "/master/content", icon: IconFiles },
   { title: "Operations", url: "/master/operations", icon: IconListDetails },
   { title: "Content Intelligence", url: "/master/content-intelligence", icon: IconCpu },
   { title: "Workspace: Users & Roles", url: "/master/users", icon: IconUsers },

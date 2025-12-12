@@ -25,7 +25,12 @@ export type Permission =
   | 'API_UPLOADS'
   | 'VIEW_TENANTS'
   | 'VIEW_CLIPPERS'
-  | 'ADMIN_TOOLS';
+  | 'ADMIN_TOOLS'
+  | 'POSTS_MANAGE'
+  | 'CREATORS_MANAGE'
+  | 'TRIAL_APPROVE'
+  | 'OPERATIONS_VIEW'
+  | 'FINANCE_VIEW';
 
 const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> = {
   MASTER: {
@@ -44,7 +49,12 @@ const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> =
       'API_FULL',
       'VIEW_TENANTS',
       'VIEW_CLIPPERS',
-      'ADMIN_TOOLS'
+      'ADMIN_TOOLS',
+      'POSTS_MANAGE',
+      'CREATORS_MANAGE',
+      'TRIAL_APPROVE',
+      'OPERATIONS_VIEW',
+      'FINANCE_VIEW'
     ],
     ADMIN: [
       'MANAGE_CLIENTS',
@@ -60,16 +70,27 @@ const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> =
       'API_FULL',
       'VIEW_TENANTS',
       'VIEW_CLIPPERS',
-      'ADMIN_TOOLS'
+      'ADMIN_TOOLS',
+      'POSTS_MANAGE',
+      'CREATORS_MANAGE',
+      'TRIAL_APPROVE',
+      'OPERATIONS_VIEW',
+      'FINANCE_VIEW'
     ],
     USER: [
       'ANALYTICS_GLOBAL',
       'ANALYTICS_CLIENT',
       'CONTENT_MANAGE',
       'TASK_MANAGE',
-      'API_LIMITED'
+      'API_LIMITED',
+      'POSTS_MANAGE',
+      'CREATORS_MANAGE'
     ],
-    VIEW_ONLY: ['ANALYTICS_GLOBAL', 'ANALYTICS_CLIENT']
+    VIEW_ONLY: [
+      'ANALYTICS_GLOBAL',
+      'ANALYTICS_CLIENT',
+      'OPERATIONS_VIEW'
+    ]
   },
   CLIENT: {
     OWNER: [
@@ -79,7 +100,9 @@ const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> =
       'TASK_MANAGE',
       'INVITE_USERS',
       'WORKSPACE_SETTINGS',
-      'API_LIMITED'
+      'API_LIMITED',
+      'POSTS_MANAGE',
+      'TRIAL_APPROVE'
     ],
     ADMIN: [
       'ANALYTICS_CLIENT',
@@ -88,7 +111,9 @@ const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> =
       'TASK_MANAGE',
       'INVITE_USERS',
       'WORKSPACE_SETTINGS',
-      'API_LIMITED'
+      'API_LIMITED',
+      'POSTS_MANAGE',
+      'TRIAL_APPROVE'
     ],
     USER: ['CONTENT_MANAGE', 'TASK_MANAGE', 'API_LIMITED'],
     VIEW_ONLY: ['ANALYTICS_CLIENT']
@@ -96,7 +121,7 @@ const permissionsByType: Record<WorkspaceType, Record<UserRole, Permission[]>> =
   CLIPPER: {
     OWNER: [],
     ADMIN: [],
-    USER: ['TASK_MANAGE', 'API_UPLOADS', 'CONTENT_MANAGE'],
+    USER: ['TASK_MANAGE', 'API_UPLOADS', 'CONTENT_MANAGE', 'POSTS_MANAGE'],
     VIEW_ONLY: []
   }
 };

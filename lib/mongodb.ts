@@ -62,7 +62,31 @@ async function ensureIndexes(db: Db) {
       .createIndex({ expires: 1 }, { expireAfterSeconds: 0 }),
     db
       .collection('verification_tokens')
-      .createIndex({ expires: 1 }, { expireAfterSeconds: 0 })
+      .createIndex({ expires: 1 }, { expireAfterSeconds: 0 }),
+
+    // Posts collection indexes
+    db.collection('posts').createIndex({ url: 1 }, { unique: true }),
+    db.collection('posts').createIndex({ is_trial: 1 }),
+    db.collection('posts').createIndex({ client: 1 }),
+    db.collection('posts').createIndex({ editor: 1 }),
+    db.collection('posts').createIndex({ platform: 1 }),
+    db.collection('posts').createIndex({ category: 1 }),
+    db.collection('posts').createIndex({ processing_status: 1 }),
+    db.collection('posts').createIndex({ belongs_to: 1 }),
+    db.collection('posts').createIndex({ finance_item_id: 1 }),
+    db.collection('posts').createIndex({ post_date: -1 }),
+    db.collection('posts').createIndex({ createdAt: -1 }),
+    db.collection('posts').createIndex({ deletedAt: 1 }, { sparse: true }),
+
+    // Creators collection indexes
+    db.collection('creators').createIndex({ url: 1 }, { unique: true }),
+    db.collection('creators').createIndex({ username: 1 }),
+    db.collection('creators').createIndex({ client: 1 }),
+    db.collection('creators').createIndex({ editor: 1 }),
+    db.collection('creators').createIndex({ platform: 1 }),
+    db.collection('creators').createIndex({ tracking_enabled: 1 }),
+    db.collection('creators').createIndex({ finance_item_id: 1 }),
+    db.collection('creators').createIndex({ deletedAt: 1 }, { sparse: true })
   ]);
 }
 
